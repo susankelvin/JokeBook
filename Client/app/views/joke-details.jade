@@ -1,0 +1,72 @@
+// list joke details
+.container(ng-controller="JokeDetailsCtrl")
+
+    .col-md-8(ng-hide="invalidUrl")
+        .row
+            .col-md-9.buffer
+                h1 {{joke.title}}
+            .col-md-3.likes.buffer
+                .row
+                    .col-md-10
+                        h4.joke-likes(ng-class="joke.likes >= 0 ? 'positive' : 'negative' ") Likes: {{joke.likes}}
+                    .col-md-2(ng-show="canVote")
+                        .row.vote-arrow
+                            .col-md-12(ng-click="upvote()")
+                                img(src='img/upvote.png')
+                        .row.vote-arrow
+                            .col-md-12(ng-click="downvote()")
+                                img(src='img/downvote.png')
+
+        .row.joke-body
+            .col-md-11.col-md-offset-1.well {{joke.body}}
+
+        .row.buffer
+            .col-md-6
+                ul.tag-list
+                    li Tags:&nbsp
+                    li(ng-repeat="tag in joke.tags")
+                        a(href="#/jokes-by-tag/{{tag}}") {{tag}}
+                        | &nbsp
+
+            .col-md-6.pull-right
+                | posted by &nbsp
+                a(href="#/user-details/{{joke.user._id}}") {{joke.user.username}}
+                | &nbspon {{joke.date | date:'medium'}}
+
+        .row(ng-show="canEdit")
+            .col-md-1
+                a.btn.btn-primary(href="#/joke/{{joke._id}}/edit") Edit
+            .col-md-1(ng-show="isAdmin")
+                p.btn.btn-primary(ng-click="deleteJoke()") Delete
+
+        .row
+            .col-md-10
+                h2.buffer Comments
+            .col-md-2(ng-show="identity.isAuthenticated()")
+                p.btn.btn-primary(ng-click="enablePostComment()") Post comment
+
+        .row(ng-show="enablePost")
+            .col-md-12.comment-post
+                textarea.form-control(placeholder="Comment", ng-model="comment.text")
+            .col-md-3.pull-right
+                .col-md-6
+                    p.btn.btn-primary(ng-click="postComment(comment)") Post
+                .col-md-6
+                    p.btn.btn-primary(ng-click="cancelComment()") Cancel
+
+
+        .row.well(ng-repeat="comment in joke.comments")
+            .row
+                .col-md-12
+                    img(width="20", heigth="20", src="{{comment.user.avatar}}", ng-show="comment.user.avatar")
+                    a(href="#/user-details/{{comment.user._id}}") {{comment.user.username}}
+                    | &nbspon {{comment.date | date: 'medium'}}
+            .row
+                .col-md-11.comment-offset.comment-text
+                    | {{comment.text}}
+            .row(ng-show="isAdmin")
+                .col-md-1
+                    p.btn.btn-primary(ng-click="deleteComment(comment._id)", data="{{comment._id}}") Delete
+
+    .col-md-12(ng-show="invalidUrl")
+        h2.center-text Invalid post id!

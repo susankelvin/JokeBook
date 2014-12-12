@@ -1,0 +1,17 @@
+extends includes/layout
+block main-content
+    header.navbar-inverse.navbar-fixed-top
+        .container
+            .navbar-header
+                a.navbar-brand(href="#/") JokeBook
+            .navbar-collapse.collapse
+                ul.nav.navbar-nav
+                    li
+                        a(href="#/jokes") Jokes
+                div(ng-include="'partials/views/login'")
+    section
+        div(ng-view)
+    footer
+        p.text-center
+            | Team Circe &copy; Telerik Academy 2014
+

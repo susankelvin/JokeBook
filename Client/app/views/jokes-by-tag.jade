@@ -1,0 +1,21 @@
+.container
+    .jumbotron
+        h2 Section: {{tag}} type  jokes
+
+
+        table.table.table-striped
+            thead
+                tr
+                    td Joke Title
+                    td Joke Author
+                    td Date Created
+                    td Likes
+            tbody
+                tr(ng-repeat="joke in jokes")
+                    td {{ joke.title }}
+                    td
+                        a(href="#/user-details/{{joke.user._id}}") {{ joke.user.username }}
+                    td {{ joke.date | date: 'medium'}}
+                    td {{ joke.likes }}
+                    td
+                        a.btn.btn-primary.btn-xs(href="#/joke/{{joke._id}}") View
